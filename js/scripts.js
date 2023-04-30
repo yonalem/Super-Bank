@@ -224,3 +224,10 @@ function welcomeLoggedUser() {
     ).innerHTML = `Welcome ${logged_member.name} `;
   }
 }
+
+//Get current year and display it on the footer
+(() => {
+  const year = new Date().getFullYear();
+  const footer = document.getElementById('footeryear');
+  footer.innerHTML = year;
+})();
