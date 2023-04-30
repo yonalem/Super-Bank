@@ -117,7 +117,7 @@ const loadProducts = () => {
                 </span>
                 ${product.price}
                 <div>
-                    Quantity: <select>
+                    Quantity: <select id="${'select_' + product.id}">
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
@@ -149,9 +149,19 @@ document.addEventListener(
       //get the id of the product
       let id = event.target.id.split('_')[1];
       let product = getProductById(id);
+
+      //get the selected quantity
+      const quantity = document.getElementById('select_' + id).value;
+
       if (product) {
-        cart.push({ product: product, quantity: 1 });
-        document.querySelector('.cart-counter').innerHTML = cart.length;
+        cart.push({ product: product, quantity: quantity });
+
+        //get the total cart size
+        const cart_size = cart.reduce(
+          (acc, item) => acc + Number(item.quantity),
+          0
+        );
+        document.querySelector('.cart-counter').innerHTML = cart_size;
         console.log(cart);
         localStorage.setItem('cart', JSON.stringify(cart));
       }
