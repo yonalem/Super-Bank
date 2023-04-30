@@ -3,7 +3,9 @@ let stored_products = JSON.parse(localStorage.getItem('products'));
 console.log(stored_products);
 const loadForEdit = () => {
   let html_format = stored_products.map(item => {
-    return `<tr>
+    return `<tr class=${
+      item.previousPrice > item.productPrice ? `"discount"` : ''
+    }>
         <th scope="row">${item.id}</th>
         <td>${item.productTitle}</td>
         <td>${item.previousPrice ? item.previousPrice : item.productPrice}</td>
@@ -25,7 +27,7 @@ const loadForEdit = () => {
       </tr>
     </thead>
     <tbody>
-      <tr>` + html_format.reduce((acc, format) => acc + format);
+      <tr>` + html_format.reduce((acc, format) => acc + format); //Do we need <tr> here?
   `</tr>   
   </table>`;
 };
