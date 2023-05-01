@@ -131,7 +131,7 @@ const loadProducts = () => {
         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
             <div class="text-center"><a id="${
               'cart_' + product.id
-            }" class="add-cart btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+            }" class="add-cart btn btn-outline-dark mt-auto" >Add to cart</a></div>
         </div>
     </div>
 </div>`;
