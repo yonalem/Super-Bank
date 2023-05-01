@@ -54,7 +54,7 @@
               </ul>
             </li>
           </ul>
-          <form class="d-flex">
+          <form id="cartform" class="d-flex">
             <button class="btn btn-outline-dark" type="submit">
               <i class="bi-cart-fill me-1"></i>
               Cart
@@ -158,6 +158,11 @@
         console.log(product);
       };
       populateProduct(getProductIdForUpdate());
+
+      document.getElementById('cartform').addEventListener('submit', function  (e) {
+    e.preventDefault();
+    window.location.href = '/cart.html';
+    });
     </script>
   </body>
 </html>

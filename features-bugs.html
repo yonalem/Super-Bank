@@ -66,7 +66,7 @@
               <a class="nav-link" href="features-bugs.html">Features/Bugs</a>
             </li>
           </ul>
-          <form class="d-flex">
+          <form id="cartform" class="d-flex">
             <button class="btn btn-outline-dark" type="submit">
               <i class="bi-cart-fill me-1"></i>
               Cart
@@ -173,5 +173,13 @@
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
+    <script>
+      document
+        .getElementById('cartform')
+        .addEventListener('submit', function (e) {
+          e.preventDefault();
+          window.location.href = '/cart.html';
+        });
+    </script>
   </body>
 </html>

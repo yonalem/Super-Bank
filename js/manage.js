@@ -40,3 +40,8 @@ loadForEdit();
   const footer = document.getElementById('footeryear');
   footer.innerHTML = year;
 })();
+
+document.getElementById('cartform').addEventListener('submit', function (e) {
+  e.preventDefault();
+  window.location.href = '/cart.html';
+});
