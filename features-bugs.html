@@ -70,7 +70,10 @@
             <button class="btn btn-outline-dark" type="submit">
               <i class="bi-cart-fill me-1"></i>
               Cart
-              <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+              <span
+                class="cart-counter badge bg-dark text-white ms-1 rounded-pill"
+                >0</span
+              >
             </button>
           </form>
         </div>
@@ -166,7 +169,7 @@
     <footer class="py-5 bg-dark">
       <div class="container">
         <p class="m-0 text-center text-white">
-          Copyright &copy; Your Website 2021
+          Copyright &copy; Your Website <span id="footeryear">2021</span>
         </p>
       </div>
     </footer>
@@ -180,6 +183,14 @@
           e.preventDefault();
           window.location.href = '/cart.html';
         });
+      //load cart counter
+      const cart_size = localStorage.getItem('cart_size');
+      if (cart_size) {
+        document.querySelector('.cart-counter').innerHTML = cart_size;
+      }
+      //Get current year and display it on the footer
+      document.getElementById('footeryear').innerHTML =
+        new Date().getFullYear();
     </script>
   </body>
 </html>

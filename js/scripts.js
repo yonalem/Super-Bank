@@ -83,6 +83,10 @@ let products = [
 //load these in the storage.
 localStorage.setItem('products', JSON.stringify(products));
 
+//load cart counter
+let cart_size = Number(localStorage.getItem('cart_size')) || 0;
+document.querySelector('.cart-counter').innerHTML = cart_size;
+
 //load products when the page is loading.
 const loadProducts = () => {
   let product_cards = '';
@@ -157,12 +161,11 @@ document.addEventListener(
         cart.push({ product: product, quantity: quantity });
 
         //get the total cart size
-        const cart_size = cart.reduce(
-          (acc, item) => acc + Number(item.quantity),
-          0
-        );
+        cart_size += Number(quantity);
+        localStorage.setItem('cart_size', cart_size);
         document.querySelector('.cart-counter').innerHTML = cart_size;
-        console.log(cart);
+
+        //console.log(cart);
         localStorage.setItem('cart', JSON.stringify(cart));
       }
     }
@@ -236,11 +239,7 @@ function welcomeLoggedUser() {
 }
 
 //Get current year and display it on the footer
-(() => {
-  const year = new Date().getFullYear();
-  const footer = document.getElementById('footeryear');
-  footer.innerHTML = year;
-})();
+document.getElementById('footeryear').innerHTML = new Date().getFullYear();
 
 document.getElementById('cartform').addEventListener('submit', function (e) {
   e.preventDefault();

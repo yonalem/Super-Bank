@@ -58,7 +58,7 @@
             <button class="btn btn-outline-dark" type="submit">
               <i class="bi-cart-fill me-1"></i>
               Cart
-              <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+              <span class="cart-counter badge bg-dark text-white ms-1 rounded-pill">0</span>
             </button>
           </form>
         </div>
@@ -102,7 +102,7 @@
     <footer class="py-5 bg-dark">
       <div class="container">
         <p class="m-0 text-center text-white">
-          Copyright &copy; Your Website 2021
+          Copyright &copy; Your Website <span id="footeryear">2021</span>
         </p>
       </div>
     </footer>
@@ -112,6 +112,11 @@
     <script>
       //proceed to checkout only if the member is logged in
       let logged_member = JSON.parse(localStorage.getItem('logged_member'));
+      const cart_size = localStorage.getItem('cart_size');
+      if(cart_size){
+        document.querySelector('.cart-counter').innerHTML = cart_size;
+      }
+
       if (logged_member) {
         let cart = JSON.parse(localStorage.getItem('cart'));
         console.log(cart);
@@ -128,10 +133,13 @@
                             </tr>`;
         });
         document.querySelector('tbody').innerHTML = cart_content;
+        
       } else {
         //the member is not logged in redirect to registration
         window.location.replace('/customer.html');
       }
+        //Get current year and display it on the footer
+        document.getElementById('footeryear').innerHTML = new Date().getFullYear();
     </script>
   </body>
 </html>

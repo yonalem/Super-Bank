@@ -45,3 +45,9 @@ document.getElementById('cartform').addEventListener('submit', function (e) {
   e.preventDefault();
   window.location.href = '/cart.html';
 });
+
+//load cart counter
+const cart_size = localStorage.getItem('cart_size');
+if (cart_size) {
+  document.querySelector('.cart-counter').innerHTML = cart_size;
+}
