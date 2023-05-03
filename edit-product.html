@@ -55,6 +55,7 @@
             </li>
           </ul>
           <form id="cartform" class="d-flex">
+            <div id="logged_member"></div>
             <button class="btn btn-outline-dark" type="submit">
               <i class="bi-cart-fill me-1"></i>
               Cart
@@ -170,6 +171,15 @@
       }
       //Get current year and display it on the footer
       document.getElementById('footeryear').innerHTML = new Date().getFullYear();
+
+      //display logged member name
+    (() => {
+      const logged_member = JSON.parse(localStorage.getItem('logged_member'));
+      const welcomeMember = document.getElementById('logged_member');
+      if (logged_member && welcomeMember) {
+        welcomeMember.innerHTML = `<i class="bi bi-person"></i> ${logged_member.name}`;
+      }
+    })();
     </script>
   </body>
 </html>

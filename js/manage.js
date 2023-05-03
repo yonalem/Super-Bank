@@ -51,3 +51,12 @@ const cart_size = localStorage.getItem('cart_size');
 if (cart_size) {
   document.querySelector('.cart-counter').innerHTML = cart_size;
 }
+
+//display logged member name
+(() => {
+  const logged_member = JSON.parse(localStorage.getItem('logged_member'));
+  const welcomeMember = document.getElementById('logged_member');
+  if (logged_member && welcomeMember) {
+    welcomeMember.innerHTML = `<i class="bi bi-person"></i> ${logged_member.name}`;
+  }
+})();
