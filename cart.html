@@ -119,8 +119,10 @@
       }
 
       if (logged_member) {
-        let cart = JSON.parse(localStorage.getItem('cart'));
+        //if cart is not empty parse it,else set empty array   
+        let cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
         console.log(cart);
+
         let cart_content = '';
         cart.forEach(item => {
           //more icons at https://icons.getbootstrap.com/

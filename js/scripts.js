@@ -61,7 +61,11 @@ let peanut = new Product(6, 'Peanuts', 14.05, '/assets/peanuts.jpg');
 peanut.prevPrice = 16.99;
 peanut.setRating(2);
 
-let cart = [];
+//if cart is not empty parse it,else set empty array
+let cart = localStorage.getItem('cart')
+  ? JSON.parse(localStorage.getItem('cart'))
+  : [];
+console.log(cart);
 
 //products database.
 let products = [
@@ -155,9 +159,16 @@ document.addEventListener(
       let product = getProductById(id);
 
       //get the selected quantity
-      const quantity = document.getElementById('select_' + id).value;
+      let quantity = Number(document.getElementById('select_' + id).value);
 
       if (product) {
+        //find product in carts list
+        const productInCart = cart.find(c => c.product.id == id);
+        if (productInCart) {
+          cart = cart.filter(c => c.product.id != id);
+          cart_size -= quantity;
+          quantity += Number(productInCart.quantity);
+        }
         cart.push({ product: product, quantity: quantity });
 
         //get the total cart size
