@@ -95,8 +95,9 @@
             <tbody></tbody>
           </table>
         </div>
+        <div><span style="display:none;justify-content:center;" class="alert alert-danger" id="balance_alert"></span></div>
         <div class="text-center">
-          <button class="btn btn-success">Checkout</button>
+          <button id="checkout" class="btn btn-success">Checkout</button>
         </div>
       </div>
     </section>
@@ -115,6 +116,8 @@
       //proceed to checkout only if the member is logged in
       let logged_member = JSON.parse(localStorage.getItem('logged_member'));
       const cart_size = localStorage.getItem('cart_size');
+      let subtotal = 0;
+
       if(cart_size){
         document.querySelector('.cart-counter').innerHTML = cart_size;
       }
@@ -125,7 +128,7 @@
         console.log(cart);
 
         let cart_content = '';
-        let subtotal = 0;
+        subtotal = 0;
         cart.forEach(item => {
           //more icons at https://icons.getbootstrap.com/
           cart_content += `<tr>
@@ -147,12 +150,26 @@
             </td></tr>`;
         document.querySelector('tbody').innerHTML = cart_content;
         
+        document.getElementById('checkout').addEventListener('click',orderCheckout);
       } else {
         //the member is not logged in redirect to registration
         window.location.replace('/customer.html');
       }
-        //Get current year and display it on the footer
-        document.getElementById('footeryear').innerHTML = new Date().getFullYear();
+
+      function orderCheckout(event){ 
+        const user = JSON.parse(localStorage.getItem('logged_member'));
+        const message = document.getElementById("balance_alert");
+        if(user.deposit < subtotal) {
+          message.style.display='flex';
+          message.innerHTML = `Insufficent balance. Your deposit amount is $${user.deposit}`;
+        }
+        else{
+          message.style.display='none';
+        }
+      }
+
+      //Get current year and display it on the footer
+      document.getElementById('footeryear').innerHTML = new Date().getFullYear();
 
         //display logged member name
       (() => {
