@@ -166,7 +166,7 @@ document.addEventListener(
         const productInCart = cart.find(c => c.product.id == id);
         if (productInCart) {
           cart = cart.filter(c => c.product.id != id);
-          cart_size -= quantity;
+          cart_size -= Number(productInCart.quantity);
           quantity += Number(productInCart.quantity);
         }
         cart.push({ product: product, quantity: quantity });
