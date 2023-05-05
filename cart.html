@@ -122,6 +122,14 @@
         document.querySelector('.cart-counter').innerHTML = cart_size;
       }
 
+      //alert delay function 
+      const wait = time => {
+        return new Promise(resolve => {
+          setTimeout(()=> {
+            resolve();
+          },time)
+      })};
+
       if (logged_member) {
         //if cart is not empty parse it,else set empty array   
         let cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
@@ -159,19 +167,66 @@
       function orderCheckout(event){ 
         const user = JSON.parse(localStorage.getItem('logged_member'));
         const message = document.getElementById("balance_alert");
+        
+        //if cart is empty
+        if(subtotal == 0){
+          message.style.display = 'flex';
+          message.innerHTML='Plese add items to the cart!';
+          
+          wait(3000).then(() => {message.style.display='none'})
+          .catch(error => { console.error('Error:', error); });
+          
+          return;
+        }
+
+        //check deposit balance
         if(user.deposit < subtotal) {
           message.style.display='flex';
-          message.innerHTML = `Insufficent balance. Your deposit amount is $${user.deposit}`;
+          message.innerHTML = `Insufficent balance. Your deposited amount is $${user.deposit}`;
         }
-        else{
-          message.style.display='none';
+        else {
+          //store ordered items 
+          const orders = localStorage.getItem('orders') ? JSON.parse(localStorage.getItem('orders')) : [];
+          const cart = JSON.parse(localStorage.getItem('cart'));
+
+          orders.push({
+            email: user.email,
+            amount: subtotal,
+            date: new Date(),
+            product: cart.map(item => {return {id:item.product.id,price:item.product.productPrice,quantity:item.quantity}})
+          });
+          localStorage.setItem('orders',JSON.stringify(orders));
+
+          //display sucsses notification 
+          message.style.display='flex';
+          message.classList.remove('alert-danger');
+          message.classList.add('alert-success');
+          message.innerHTML='You have Successfully Chekedout! Thanks for your order';
+
+          //hide notification 
+          wait(3000).then(() => {
+            message.style.display='none';
+          })
+          
+          //empty cart
+          clearCart();
+          return;
         }
+      }
+
+      //clear after checkout 
+      function clearCart(){
+          document.querySelector('tbody').innerHTML = '';
+          localStorage.setItem('cart',JSON.stringify([]));
+          localStorage.setItem('cart_size','0');
+          document.querySelector('.cart-counter').innerHTML = 0;
+          subtotal = 0;
       }
 
       //Get current year and display it on the footer
       document.getElementById('footeryear').innerHTML = new Date().getFullYear();
 
-        //display logged member name
+      //display logged member name
       (() => {
         const logged_member = JSON.parse(localStorage.getItem('logged_member'));
         const welcomeMember = document.getElementById('logged_member');
