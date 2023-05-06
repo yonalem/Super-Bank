@@ -88,20 +88,20 @@
               type="text"
               class="form-control"
               id="name"
-              placeholder="name@example.com"
+              required
             />
           </div>
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" />
+            <input type="email" class="form-control" id="email" placeholder="name@example.com" required/>
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" />
+            <input minlength="6" type="password" class="form-control" id="password" required/>
           </div>
           <div class="mb-3">
             <label for="deposit" class="form-label">Deposit</label>
-            <input type="text" class="form-control" id="deposit" />
+            <input type="number" class="form-control" id="deposit" required/>
           </div>
           <div class="mb-3 text-center">
             <button type="button" class="btn btn-primary" id="save_member">
@@ -126,16 +126,43 @@
     <script>
       //verify if the all values are provided and not empty.
       let save_handler = () => {
+        const name = document.getElementById('name');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const deposit = document.getElementById('deposit');
+        if(!name.checkValidity()){
+          setMessage('Please enter valid name',false);
+          return;
+        }
+        if(!(/\S+@\S+\.\S+/).test(email.value)){
+          setMessage('Please enter valid email',false);
+          return;
+        }
+
+        if(!password.checkValidity()){
+          if(password.value.length < 6)
+            setMessage('Minimum Password length is six',false);
+          else
+            setMessage('Password is required',false);
+          return;
+        }
+
+        if(!deposit.checkValidity() && deposit.value <= 0){
+          setMessage('Please enter valid deposit',false);
+          return;
+        }
+
         let member = {
-          name: document.getElementById('name').value,
-          email: document.getElementById('email').value,
-          password: document.getElementById('password').value,
-          deposit: document.getElementById('deposit').value,
+          name: name.value,
+          email: email.value,
+          password: password.value,
+          deposit: deposit.value,
         };
         let member_added = registerMember(member); //save it to the storage.
         if (member_added) {
           //successfully added to the storage
           setMessage('Successfully added member', true);
+          //window.location.href = '/login.html';
         } else {
           setMessage('Please make sure date is inserted correctly', false);
         }

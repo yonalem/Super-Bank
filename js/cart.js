@@ -30,7 +30,7 @@ if (logged_member) {
                       <td>${item.product.productTitle}</td>
                       <td><input id="input_${
                         item.product.id
-                      }" onchange=editQuantity(this) type="text" maxlength="3" size="8" value='${
+                      }" onchange=editQuantity(this) type="number" min="1" max="99" required value='${
       item.quantity
     }' /></td>
                       <td>${formatCurrency(
@@ -68,7 +68,7 @@ function orderCheckout(event) {
   //if cart is empty
   if (subtotal == 0) {
     const payload = {
-      message: 'Plese add items to the cart!',
+      message: 'Plese add items into the cart!',
       success: false,
     };
 
@@ -174,6 +174,17 @@ function removeItem(item_link) {
 
 //update quantity
 function editQuantity(text_box) {
+  const alert = document.getElementById('balance_alert');
+  if (!text_box.checkValidity()) {
+    displayMessage(
+      {
+        message: 'Please enter valid quantity number between 1 and 99',
+        success: false,
+      },
+      alert
+    );
+    return;
+  }
   const productId = text_box.id.split('_')[1];
   const quantity = Number(text_box.value);
   const rowItem = cart.find(item => item.product.id == productId);
