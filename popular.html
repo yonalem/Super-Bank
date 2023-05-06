@@ -46,7 +46,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><a class="dropdown-item" href="manage.html">All Products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                 <li><a class="dropdown-item" href="popular.html">Popular Items</a></li>
                                 <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
@@ -71,9 +71,9 @@
     <header class="bg-dark py-5">
       <div class="container px-4 px-lg-5">
         <div class="text-center text-white">
-          <h1 class="display-4 fw-bolder">Manage Products</h1>
+          <h1 class="display-4 fw-bolder">Popular Products</h1>
           <p class="lead fw-normal text-white-50 mb-0">
-            With this shop hompeage template
+            Get our most loved products today
           </p>
         </div>
       </div>
@@ -98,7 +98,61 @@
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
-    <script src="js/manage.js"></script>
+    <script>
+      try{
+        let stored_products = JSON.parse(localStorage.getItem('products'));
+        stored_products= stored_products.filter(product => product.rating >= 4);
+        
+        (() => {
+            let html_format = stored_products.map(item => {
+            return `<tr class=${item.previousPrice > item.productPrice ?        `"discount"` : ''}>
+                <th scope="row">${item.id}</th>
+                <td>${item.productTitle}</td>
+                <td>${item.previousPrice ? item.previousPrice : item.productPrice}</td>
+                <td>${item.productPrice}</td>
+                <td>${item.rating}</td>
+            </tr>`;
+            });
+            document.getElementById('content_holder').innerHTML =
+                `<table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Prev Price</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Rating</th>
+                    </tr>
+                    </thead>
+                    <tbody>` + html_format.reduce((acc, format) => acc + format); 
+                `</table>`;
+        })();
+
+        //Get current year and display it on the footer
+        document.getElementById('footeryear').innerHTML = new Date().getFullYear();
+
+        document.getElementById('cartform').addEventListener('submit', function (e) {
+            e.preventDefault();
+            window.location.href = '/cart.html';
+        });
+
+        //load cart counter
+        const cart_size = localStorage.getItem('cart_size');
+        if (cart_size) {
+            document.querySelector('.cart-counter').innerHTML = cart_size;
+        }
+
+        //display logged member name
+        (() => {
+            const logged_member = JSON.parse(localStorage.getItem('logged_member'));
+            const welcomeMember = document.getElementById('logged_member');
+            if (logged_member && welcomeMember) {
+                welcomeMember.innerHTML = `<i class="bi bi-person"></i> ${logged_member.name}`;
+            }
+        })();
+    }
+    catch{error => {console.error('Error',error)}}
+    </script>
    
   </body>
 </html>

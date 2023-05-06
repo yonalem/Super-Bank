@@ -84,6 +84,12 @@ let products = [
   ),
 ];
 
+//set random rating between 0 and 5
+products = products.map(item => {
+  item.setRating(Math.floor(Math.random() * 6));
+  return item;
+});
+
 //load these in the storage.
 localStorage.setItem('products', JSON.stringify(products));
 
