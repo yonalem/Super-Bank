@@ -28,9 +28,11 @@ if (logged_member) {
     //more icons at https://icons.getbootstrap.com/
     cart_content += `<tr>
                       <td>${item.product.productTitle}</td>
-                      <td><input type="text" maxlength="3" size="8" value='${
-                        item.quantity
-                      }' /></td>
+                      <td><input id="input_${
+                        item.product.id
+                      }" onchange=editQuantity(this) type="text" maxlength="3" size="8" value='${
+      item.quantity
+    }' /></td>
                       <td>${formatCurrency(
                         Number(item.product.productPrice)
                       )}</td>
@@ -153,24 +155,51 @@ function removeItem(item_link) {
   const row = item_link.parentNode.parentNode;
   const rowItem = cart.find(item => item.product.id == productId);
 
-  //remove product from cart
+  //remove from cart
   cart = cart.filter(item => item.product.id != productId);
-  localStorage.setItem('cart', JSON.stringify(cart));
 
-  //set cart counter
+  //recalculate subtotal and cart counter
   cart_size = cart_size - Number(rowItem.quantity);
-  localStorage.setItem('cart_size', cart_size);
-  document.querySelector('.cart-counter').innerHTML = cart_size;
-
-  //recalculate subtotal amount
   subtotal =
     Number(subtotal) -
     Number(rowItem.product.productPrice) * Number(rowItem.quantity);
-  document.getElementById('subtotal').innerHTML = formatCurrency(subtotal);
 
+  updateCart();
   row.remove();
 }
 
+//update quantity
+function editQuantity(text_box) {
+  const productId = text_box.id.split('_')[1];
+  const quantity = Number(text_box.value);
+  const rowItem = cart.find(item => item.product.id == productId);
+
+  const prevQuantity = Number(rowItem.quantity);
+  const productPrice = Number(rowItem.product.productPrice);
+
+  //update value in carts
+  cart = cart.map(item => {
+    if (item.product.id == productId) {
+      item.quantity = quantity;
+    }
+    return item;
+  });
+
+  //update cart size and subtotal
+  cart_size = Number(cart_size) - prevQuantity + quantity;
+  subtotal =
+    Number(subtotal) - prevQuantity * productPrice + quantity * productPrice;
+
+  updateCart();
+}
+
+//updating cart info
+function updateCart() {
+  localStorage.setItem('cart', JSON.stringify(cart));
+  localStorage.setItem('cart_size', cart_size);
+  document.querySelector('.cart-counter').innerHTML = cart_size;
+  document.getElementById('subtotal').innerHTML = formatCurrency(subtotal);
+}
 //formating number to USD currency
 function formatCurrency(amount) {
   return new Intl.NumberFormat('en-US', {
