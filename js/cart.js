@@ -213,7 +213,16 @@ function formatCurrency(amount) {
 }
 
 //Get current year and display it on the footer
-document.getElementById('footeryear').innerHTML = new Date().getFullYear();
+//document.getElementById('footeryear').innerHTML = new Date().getFullYear();
+(async () => {
+  const response = await fetch(
+    'http://worldtimeapi.org/api/timezone/America/New_York'
+  );
+  const date = await response.json();
+  const current_year = new Date(date.datetime).getFullYear();
+
+  document.getElementById('footeryear').innerHTML = current_year;
+})();
 
 //display logged member name
 (() => {
