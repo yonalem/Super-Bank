@@ -104,6 +104,10 @@ function orderCheckout(event) {
     });
     localStorage.setItem('orders', JSON.stringify(orders));
 
+    //deduct amount from deposit
+    user.deposit = user.deposit - subtotal;
+    localStorage.setItem('logged_member', JSON.stringify(user));
+
     //notify sucsses
     const payload = {
       message: 'You have Successfully Chekedout! Thanks for your order',
